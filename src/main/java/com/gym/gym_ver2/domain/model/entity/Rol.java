@@ -2,16 +2,15 @@ package com.gym.gym_ver2.domain.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-
+@Data
+@Builder
 @Entity
 @Table(name = "rol")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
