@@ -20,6 +20,4 @@ public class RegisterRequest {
     Integer numeroFicha;
     Integer horasRecompensas;
     Integer nivelActualUsuario;
-
-
 }

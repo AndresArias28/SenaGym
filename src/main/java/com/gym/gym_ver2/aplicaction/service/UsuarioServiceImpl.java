@@ -17,17 +17,18 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     public UsuarioServiceImpl(UsuarioRepository usuarioRepository, RolRepository rolRepository) {
+
         this.usuarioRepository = usuarioRepository;
         this.rolRepository = rolRepository;
     }
 
     @Override
     public List<UsuarioDTO> getUsers() {
+
         List<Usuario> usuarios = usuarioRepository.findAll();
 
         return usuarios.stream()
                 .map(usr -> new UsuarioDTO(
-
                         usr.getIdUsuario(),
                         usr.getNombreUsuario(), // Nombre
                         usr.getEmailUsuario(),
@@ -42,6 +43,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     public Usuario crearUsuarioConRolDefecto(Usuario usuario) {
+
         Rol rolPorDefecto = rolRepository.findById(2)
                 .orElseThrow(() -> new IllegalArgumentException("El rol con ID 2 no existe"));
         usuario.setIdRol(rolPorDefecto);

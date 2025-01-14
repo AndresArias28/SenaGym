@@ -9,9 +9,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
-
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @Service
 @RequiredArgsConstructor
@@ -23,20 +22,32 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public AuthResponse login(LoginRequest rq) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(rq.getEmail(), rq.getPassword()));
-        Usuario usuario = userRepository.findByEmailUsuario(rq.getEmail())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-//        UserDetails user = userRepository.findByEmail(rq.getEmail())
-//                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        if (rq.getContrasenaUsuario() == null || rq.getContrasenaUsuario().isEmpty()) {
+            throw new IllegalArgumentException("La contraseña no puede estar vacía");
+        }
 
-        String token = jwtService.createToken(usuario);
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(rq.getEmailUsuario(), rq.getContrasenaUsuario() )
+        );
+
+        Usuario usuario = userRepository.findByEmailUsuario(rq.getEmailUsuario()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        String token = jwtService.createToken(new HashMap<>(),
+                new org.springframework.security.core.userdetails.User(
+                        usuario.getEmailUsuario(),
+                        usuario.getContrasenaUsuario(),
+                        new ArrayList<>()
+                )
+        );
+
         return AuthResponse.builder()
                 .token(token)
                 .build();
     }
 
     public AuthResponse register(RegisterRequest rq) {
+
         Usuario usuario = Usuario.builder()
                 .nombreUsuario(rq.getNombreUsuario())
                 .apellidoUsuario(rq.getApellidoUsuario())
@@ -49,7 +60,7 @@ public class AuthService {
                 .horasRecompensas(rq.getHorasRecompensas())
                 .numeroFicha(rq.getNumeroFicha())
                 .contrasenaUsuario( passwordEncoder.encode(rq.getContrasenaUsuario()))
-                .idRol(Rol.builder().idRol(1).build())
+                .idRol(Rol.builder().idRol(2).build())
                 .build();
 
         userRepository.save(usuario);

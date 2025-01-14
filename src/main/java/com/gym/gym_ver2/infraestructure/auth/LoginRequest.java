@@ -2,22 +2,21 @@ package com.gym.gym_ver2.infraestructure.auth;
 
 import lombok.*;
 
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginRequest {
 
-    private String email;
-    private String password;
+    private String emailUsuario;
+    private String contrasenaUsuario;
 
-    public String getEmail() {
-        return email;
+    public String getEmailUsuario() {
+        return emailUsuario;
     }
 
-    public String getPassword() {
-        return password;
+    public String getContrasenaUsuario() {
+        return contrasenaUsuario;
     }
 }
 

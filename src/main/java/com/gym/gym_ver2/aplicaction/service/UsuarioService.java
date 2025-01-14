@@ -6,6 +6,7 @@ import com.gym.gym_ver2.domain.model.pojos.UsuarioDTO;
 import java.util.List;
 
 public interface UsuarioService {
+
     List<UsuarioDTO> getUsers();
 
     void createUser(Usuario usuario);
